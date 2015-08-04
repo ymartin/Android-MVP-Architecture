@@ -1,4 +1,4 @@
-package com.ymartin.mvparchitecture;
+package com.ymartin.presentation;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
