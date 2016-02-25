@@ -1,7 +1,11 @@
-package com.ymartin.ui;
+package com.ymartin;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.ymartin.injector.ApplicationComponent;
+import com.ymartin.injector.ApplicationModule;
+import com.ymartin.injector.DaggerApplicationComponent;
 
 public class AndroidApplication extends Application {
     private ApplicationComponent component;
@@ -20,6 +24,7 @@ public class AndroidApplication extends Application {
     public ApplicationComponent component() {
         return component;
     }
+
 
     public static AndroidApplication get(Context context) {
         return (AndroidApplication) context.getApplicationContext();

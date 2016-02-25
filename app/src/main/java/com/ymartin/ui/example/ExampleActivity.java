@@ -1,6 +1,5 @@
-package com.ymartin.ui;
+package com.ymartin.ui.example;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,51 +7,38 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ymartin.data.model.User;
-import com.ymartin.data.repository.UserRepository;
+import com.ymartin.AndroidApplication;
+import com.ymartin.ui.R;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
-
-public class MainActivity extends AppCompatActivity {
+public class ExampleActivity extends AppCompatActivity implements ExampleView {
 
     @Inject
-    UserRepository userRepository;
+    ExamplePresenter examplePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Context context = this;
-
         AndroidApplication.get(this).component().inject(this);
 
-        userRepository.users().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<List<User>>() {
-                @Override
-                public void onCompleted() {
+        examplePresenter.attachView(this);
+    }
 
-                }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        examplePresenter.loadUsers();
+    }
 
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onNext(List<User> users) {
-                    for (User user : users) {
-                        Toast.makeText(context, user.getEmail(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        examplePresenter.detachView();
     }
 
     @Override
@@ -75,5 +61,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showUsers(List<User> users) {
+        for (User user : users) {
+            Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

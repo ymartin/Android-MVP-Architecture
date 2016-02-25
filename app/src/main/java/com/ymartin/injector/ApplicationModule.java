@@ -1,6 +1,8 @@
-package com.ymartin.ui;
+package com.ymartin.injector;
 
 import android.app.Application;
+
+import com.ymartin.AndroidApplication;
 
 import javax.inject.Singleton;
 
