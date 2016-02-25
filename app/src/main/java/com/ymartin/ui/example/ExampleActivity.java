@@ -1,6 +1,7 @@
 package com.ymartin.ui.example;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,31 +15,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ExampleActivity extends AppCompatActivity implements ExampleView {
+public class ExampleActivity extends BaseActivity<ExampleView, ExamplePresenter> implements ExampleView {
 
     @Inject
     ExamplePresenter examplePresenter;
+
+    @NonNull
+    @Override
+    public ExamplePresenter getPresenter() {
+        return examplePresenter;
+    }
+
+    @Override
+    protected void injectDependencies() {
+        AndroidApplication.get(this).component().inject(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        AndroidApplication.get(this).component().inject(this);
-
-        examplePresenter.attachView(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         examplePresenter.loadUsers();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        examplePresenter.detachView();
     }
 
     @Override
