@@ -1,4 +1,4 @@
-package com.ymartin.data.entity;
+package com.ymartin.data.model;
 
 import com.google.gson.annotations.SerializedName;
 

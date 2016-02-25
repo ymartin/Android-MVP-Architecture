@@ -7,9 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.ymartin.data.entity.User;
+import com.ymartin.data.model.User;
 import com.ymartin.data.repository.UserRepository;
-import com.ymartin.presentation.R;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         AndroidApplication.get(this).component().inject(this);
 
-        userRepository.users().observeOn(AndroidSchedulers.mainThread())
+        userRepository.users().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<User>>() {
                 @Override
                 public void onCompleted() {
@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-
-
-        int x = 1;
 
     }
 
